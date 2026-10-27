@@ -1,0 +1,20 @@
+node_modules/
+dist/
+work/
+.openai/
+
+# Local development files
+.env
+.env.*
+*.log
+
+# Codex design notes and source references
+AGENTS.md
+design-qa.md
+design-source.png
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

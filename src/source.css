@@ -1,0 +1,11 @@
+.source-link {
+  display: inline-flex;
+  margin-top: 12px;
+  color: #7443d1;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+}
+
+.source-link:hover {
+  text-decoration: underline;
+}
