@@ -156,4 +156,5 @@ const [books, foods, jobs] = foodsOnly
 const snapshot = { generated_at: collectedAt, policy: "public metadata snapshots and public research dataset; no authentication bypass, user profiles, contact details, or private data",
   counts: { books: books.length, foods: foods.length, jobs: jobs.length }, books, foods, jobs };
 await writeFile(path.join(dataDir, "real-data.json"), `${JSON.stringify(snapshot, null, 2)}\n`, "utf8");
+await writeFile(path.join(root, "public", "real-data.json"), `${JSON.stringify(snapshot, null, 2)}\n`, "utf8");
 console.log(JSON.stringify(snapshot.counts, null, 2));

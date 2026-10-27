@@ -2,6 +2,10 @@
 
 一个本地运行的三级渐进式爬虫靶场。关卡数据来自公开页面的真实快照，并在本地稳定提供给练习者。
 
+在线访问：[GitHub Pages](https://zephyraine.github.io/spiderlab-crawler-lab/)
+
+GitHub Pages 使用静态兼容模式，L1/L2 的分页和筛选以及 L3 的登录界面均可直接使用。本地运行模式保留完整的 Node.js 接口、Cookie、Session 与 CSRF 练习。
+
 ## 启动
 
 ```bash
