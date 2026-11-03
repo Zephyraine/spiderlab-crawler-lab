@@ -24,14 +24,16 @@ async function sign(value, secret) {
   return bytesToBase64Url(new Uint8Array(await crypto.subtle.sign("HMAC", key, enc.encode(value))));
 }
 async function createSession(env) {
+  if (!env.SESSION_SECRET) throw new Error("SESSION_SECRET is not configured");
   const payload = `${Date.now() + 30 * 60 * 1000}.${crypto.randomUUID()}`;
-  return `${payload}.${await sign(payload, env.SESSION_SECRET || "spiderlab-practice-session-v1")}`;
+  return `${payload}.${await sign(payload, env.SESSION_SECRET)}`;
 }
 async function validSession(request, env) {
+  if (!env.SESSION_SECRET) return false;
   const token = cookies(request).crawler_session || ""; const parts = token.split(".");
   if (parts.length !== 3 || Number(parts[0]) <= Date.now()) return false;
   const payload = `${parts[0]}.${parts[1]}`;
-  return parts[2] === await sign(payload, env.SESSION_SECRET || "spiderlab-practice-session-v1");
+  return parts[2] === await sign(payload, env.SESSION_SECRET);
 }
 
 async function handleL1(request, env, url) {
@@ -72,6 +74,7 @@ async function handleApi(request, env, url) {
     const body=await request.json().catch(()=>({})),jar=cookies(request),csrf=body.csrf||request.headers.get("x-csrf-token");
     if(!csrf||csrf!==jar.crawler_csrf)return sendJson({error:"CSRF token 无效"},403);
     if(body.username!=="admin"||body.password!=="admin123")return sendJson({error:"用户名或密码错误"},401);
+    if(!env.SESSION_SECRET)return sendJson({error:"服务端登录密钥未配置"},503);
     return sendJson({ok:true},200,{"set-cookie":`crawler_session=${encodeURIComponent(await createSession(env))}; Path=/; HttpOnly; SameSite=Lax; Secure; Max-Age=1800`});
   }
   if (url.pathname === "/api/l3/logout" && request.method === "POST") return sendJson({ok:true},200,{"set-cookie":"crawler_session=; Path=/; HttpOnly; SameSite=Lax; Secure; Max-Age=0"});

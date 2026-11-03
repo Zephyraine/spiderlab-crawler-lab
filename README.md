@@ -38,3 +38,36 @@ npm run sync:data
 采集器不会登录第三方账号、破解验证码或读取用户私有数据。每条记录包含来源平台、原始链接、来源 ID 和采集时间。大众点评数据来自两份公开研究数据集（`Liangchengdeye/DaZhongdianping` 与 `wq1224/dianpingspider`）；豆瓣封面、餐厅图片和公司图标会缓存到本地，无法下载的图片自动使用本地占位图。
 
 开发服务器 `server.mjs` 同时承载 Vite 页面和靶场接口；生产版使用 Worker 提供同等的 L1 页面、L2 JSON 接口和 L3 会话接口。
+
+## Cloudflare Workers 部署
+
+仓库已包含 `wrangler.jsonc` 和 `worker/index.js`，可同时部署网页静态资源与真实的 L3 登录接口。
+
+Cloudflare Workers Builds 配置：
+
+```text
+Production branch: main
+Build command: npm run build:cloudflare
+Deploy command: npm run deploy:cloudflare
+Root directory: /
+```
+
+在 Cloudflare 项目的 `Settings → Variables and Secrets` 中添加加密变量：
+
+```text
+SESSION_SECRET=<足够长的随机字符串>
+```
+
+未配置 `SESSION_SECRET` 时，L3 登录接口会拒绝创建会话，不会使用公开的默认密钥。
+
+本地测试 Cloudflare Worker 前，复制 `.dev.vars.example` 为 `.dev.vars` 并替换其中的示例值，然后运行：
+
+```bash
+npm run dev:cloudflare
+```
+
+仅检查构建和 Cloudflare 部署配置，不发布：
+
+```bash
+npm run check:cloudflare
+```

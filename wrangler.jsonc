@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "spiderlab-crawler-lab",
+  "main": "./worker/index.js",
+  "compatibility_date": "2026-11-03",
+  "assets": {
+    "directory": "./dist/client",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/api/*",
+      "/target/l1/books",
+      "/target/l1/books/*"
+    ]
+  }
+}

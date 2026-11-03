@@ -1,12 +1,15 @@
 node_modules/
 dist/
 work/
+.wrangler/
 .openai/*
 !.openai/hosting.json
 
 # Local development files
 .env
 .env.*
+.dev.vars*
+!.dev.vars.example
 *.log
 
 # Codex design notes and source references

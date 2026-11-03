@@ -131,3 +131,21 @@ test("protects L3 job data with CSRF and a signed session cookie", async () => {
   assert.equal(allowed.status, 200);
   assert.equal(jobs.items[0].title, "Python 实习生");
 });
+
+test("fails closed when the Cloudflare session secret is missing", async () => {
+  const envWithoutSecret = { ASSETS: apiEnv.ASSETS };
+  const session = await worker.fetch(new Request("https://example.test/api/l3/session"), envWithoutSecret);
+  const sessionData = await session.json();
+  const csrfCookie = session.headers.get("set-cookie").split(";")[0];
+
+  assert.equal(sessionData.authenticated, false);
+
+  const login = await worker.fetch(new Request("https://example.test/api/l3/login", {
+    method: "POST",
+    headers: { "content-type": "application/json", cookie: csrfCookie, "x-csrf-token": sessionData.csrf },
+    body: JSON.stringify({ username: "admin", password: "admin123", csrf: sessionData.csrf }),
+  }), envWithoutSecret);
+
+  assert.equal(login.status, 503);
+  assert.deepEqual(await login.json(), { error: "服务端登录密钥未配置" });
+});
