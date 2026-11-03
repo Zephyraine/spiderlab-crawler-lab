@@ -3,6 +3,7 @@
   "name": "spiderlab-crawler-lab-worker",
   "main": "./worker/index.js",
   "compatibility_date": "2026-11-03",
+  "keep_vars": true,
   "assets": {
     "directory": "./dist/client",
     "binding": "ASSETS",
