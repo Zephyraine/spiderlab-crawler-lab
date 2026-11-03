@@ -51,6 +51,34 @@ async function localizeImages(rows, folder, fallback, referer, batchSize = 8, pa
   return rows;
 }
 
+async function enrichDoubanDetails(rows, batchSize = 3) {
+  let updated = 0;
+  for (let start = 0; start < rows.length; start += batchSize) {
+    await Promise.all(rows.slice(start, start + batchSize).map(async (row) => {
+      try {
+        const $ = cheerio.load(await getText(row.source_url, { referer: "https://book.douban.com/" }));
+        const fullIntro = $("#link-report .all .intro").first();
+        const intro = fullIntro.length ? fullIntro : $("#link-report .intro").last();
+        const paragraphs = intro.find("p").map((_, node) => clean($(node).text())).get().filter(Boolean);
+        const description = paragraphs.join("\n\n") || clean(intro.text());
+        const info = $("#info").text();
+        const field = (label) => clean(info.match(new RegExp(`${label}:\\s*([^\\n]+)`))?.[1] || "");
+        if (description) row.description = description;
+        row.isbn = field("ISBN") || row.isbn || "";
+        row.pages = field("页数") || row.pages || "";
+        row.binding = field("装帧") || row.binding || "";
+        row.price = field("定价") || row.price || "";
+        updated += 1;
+      } catch (error) {
+        console.warn(`保留原简介 ${row.source_id}: ${error.message}`);
+      }
+    }));
+    console.log(`豆瓣详情 ${Math.min(start + batchSize, rows.length)}/${rows.length}，已补齐 ${updated}`);
+    await sleep(350);
+  }
+  return rows;
+}
+
 async function syncDouban() {
   const tags = ["文学", "小说", "历史", "科普", "艺术", "哲学", "社会学", "心理学", "经济学", "技术"];
   const rows = [];
@@ -73,7 +101,8 @@ async function syncDouban() {
     }
   }
   const unique = [...new Map(rows.filter((row) => row.title).map((row) => [row.source_url, row])).values()].map((row, i) => ({ ...row, id: i + 1 }));
-  return localizeImages(unique, "books", "/assets/level-books.png", "https://book.douban.com/", 3, 100);
+  const localized = await localizeImages(unique, "books", "/assets/level-books.png", "https://book.douban.com/", 3, 100);
+  return enrichDoubanDetails(localized);
 }
 
 async function syncDianping() {
@@ -149,10 +178,13 @@ async function syncBoss() {
 
 await mkdir(dataDir, { recursive: true }); await mkdir(imageRoot, { recursive: true });
 const foodsOnly = process.argv.includes("--foods-only");
-const previous = foodsOnly ? JSON.parse(await readFile(path.join(dataDir, "real-data.json"), "utf8")) : null;
+const bookDetailsOnly = process.argv.includes("--book-details-only");
+const previous = foodsOnly || bookDetailsOnly ? JSON.parse(await readFile(path.join(dataDir, "real-data.json"), "utf8")) : null;
 const [books, foods, jobs] = foodsOnly
   ? [previous.books, await syncDianping(), previous.jobs]
-  : await Promise.all([syncDouban(), syncDianping(), syncBoss()]);
+  : bookDetailsOnly
+    ? [await enrichDoubanDetails(previous.books), previous.foods, previous.jobs]
+    : await Promise.all([syncDouban(), syncDianping(), syncBoss()]);
 const snapshot = { generated_at: collectedAt, policy: "public metadata snapshots and public research dataset; no authentication bypass, user profiles, contact details, or private data",
   counts: { books: books.length, foods: foods.length, jobs: jobs.length }, books, foods, jobs };
 await writeFile(path.join(dataDir, "real-data.json"), `${JSON.stringify(snapshot, null, 2)}\n`, "utf8");

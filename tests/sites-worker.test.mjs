@@ -4,7 +4,7 @@ import test from "node:test";
 import worker from "../worker/index.js";
 
 const fixture = {
-  books: [{ id:1, title:"测试图书", author:"作者", publisher:"出版社", year:"2026", score:"9.0", reviews:10, category:"文学", description:"简介", image:"/book.jpg", source_platform:"豆瓣读书", collected_at:"2026-01-01" }],
+  books: [{ id:1, title:"测试图书", author:"作者", publisher:"出版社", year:"2026", score:"9.0", reviews:10, category:"文学", description:"完整简介第一段\n\n完整简介第二段", price:"59.00元", pages:"320", binding:"平装", isbn:"9780000000000", image:"/book.jpg", source_platform:"豆瓣读书", collected_at:"2026-01-01" }],
   foods: [{ id:1, name:"测试餐厅", city:"上海", area:"静安寺", category:"火锅", score:"4.8", reviews:20, address:"测试路 1 号", image:"/food.jpg", source_platform:"大众点评" }],
   jobs: [{ id:1, title:"Python 实习生", salary:"200元/天", company:"测试公司", category:"后端开发", city:"上海", location:"上海静安区", degree:"本科", skills:["Python"], image:"/job.jpg", source_platform:"BOSS直聘" }],
 };
@@ -88,6 +88,16 @@ test("renders L1 as crawlable HTML with full-card detail links", async () => {
   assert.equal(response.status, 200);
   assert.match(html, /class="data-card data-card-link" href="\/target\/l1\/books\/1"/);
   assert.doesNotMatch(html, /GET \/target\/l1\/books/);
+});
+
+test("renders complete L1 detail metadata without collection time", async () => {
+  const response = await worker.fetch(new Request("https://example.test/target/l1/books/1"), apiEnv);
+  const html = await response.text();
+  assert.equal(response.status, 200);
+  assert.match(html, /完整简介第一段\n\n完整简介第二段/);
+  assert.match(html, /<dt>定价<\/dt><dd>59\.00元<\/dd>/);
+  assert.match(html, /<dt>ISBN<\/dt><dd>9780000000000<\/dd>/);
+  assert.doesNotMatch(html, /采集时间/);
 });
 
 test("serves L2 through an unauthenticated JSON search endpoint", async () => {

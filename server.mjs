@@ -57,7 +57,7 @@ async function handleLab(req, res) {
   if (bookMatch && req.method === "GET") {
     const book = books.find((b) => b.id === Number(bookMatch[1]));
     if (!book) return false;
-    const content = `<main class="target-wrap"><a class="back" href="/target/l1/books">← 返回图书列表</a><article class="detail"><img src="${esc(book.image)}" alt=""><div><span class="eyebrow">${esc(book.category)} · ${esc(book.year)}</span><h1>${esc(book.title)}</h1><p class="lead">${esc(book.description)}</p><dl><dt>作者</dt><dd>${esc(book.author)}</dd><dt>出版社</dt><dd>${esc(book.publisher)}</dd><dt>评分</dt><dd>${esc(book.score || "—")}（${book.reviews} 人评价）</dd><dt>数据来源</dt><dd><span class="source-note">${esc(book.source_platform)}公开数据快照</span></dd><dt>采集时间</dt><dd>${esc(book.collected_at)}</dd></dl></div></article></main>`;
+    const content = `<main class="target-wrap"><a class="back" href="/target/l1/books">← 返回图书列表</a><article class="detail"><img src="${esc(book.image)}" alt=""><div><span class="eyebrow">${esc(book.category)} · ${esc(book.year)}</span><h1>${esc(book.title)}</h1><p class="lead">${esc(book.description)}</p><dl><dt>作者</dt><dd>${esc(book.author)}</dd><dt>出版社</dt><dd>${esc(book.publisher)}</dd><dt>定价</dt><dd>${esc(book.price || "—")}</dd>${book.pages?`<dt>页数</dt><dd>${esc(book.pages)}</dd>`:""}${book.binding?`<dt>装帧</dt><dd>${esc(book.binding)}</dd>`:""}${book.isbn?`<dt>ISBN</dt><dd>${esc(book.isbn)}</dd>`:""}<dt>评分</dt><dd>${esc(book.score || "—")}（${book.reviews} 人评价）</dd><dt>数据来源</dt><dd><span class="source-note">${esc(book.source_platform)}公开数据快照</span></dd></dl></div></article></main>`;
     res.writeHead(200, { "content-type": "text/html; charset=utf-8" }); res.end(shell(book.title, content, "L1")); return true;
   }
 

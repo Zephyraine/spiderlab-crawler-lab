@@ -46,6 +46,35 @@
   font-size: 11px;
 }
 
+.lead {
+  white-space: pre-line;
+}
+
+.detail-tags {
+  color: #5f5369;
+  line-height: 1.75;
+}
+
+.detail > div {
+  min-width: 0;
+}
+
+.detail.detail {
+  align-items: start;
+}
+
+.detail.detail h1 {
+  max-width: 100%;
+  font-size: clamp(30px, 3vw, 40px);
+  white-space: normal;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+
+.detail dd {
+  overflow-wrap: anywhere;
+}
+
 @media (max-width: 680px) {
   .job-list .job-card {
     padding: 16px;
