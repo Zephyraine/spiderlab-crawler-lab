@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "spiderlab-crawler-lab",
+  "name": "spiderlab-crawler-lab-worker",
   "main": "./worker/index.js",
   "compatibility_date": "2026-11-03",
   "assets": {
