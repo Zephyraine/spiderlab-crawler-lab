@@ -56,6 +56,31 @@ test("falls back to index.html for an unknown app route", async () => {
   assert.deepEqual(calls, ["/flow/step-two?source=share", "/index.html"]);
 });
 
+test("serves the L2 and L3 level routes through the app shell", async () => {
+  for (const pathname of ["/target/l2/foods", "/target/l3/jobs"]) {
+    const calls = [];
+    const response = await worker.fetch(
+      new Request(`https://example.test${pathname}`, {
+        headers: { accept: "text/html" },
+      }),
+      {
+        ASSETS: {
+          fetch: async (request) => {
+            const url = new URL(request.url);
+            calls.push(url.pathname);
+            return new Response(url.pathname === "/index.html" ? "app" : "missing", {
+              status: url.pathname === "/index.html" ? 200 : 404,
+            });
+          },
+        },
+      },
+    );
+
+    assert.equal(response.status, 200);
+    assert.deepEqual(calls, [pathname, "/index.html"]);
+  }
+});
+
 test("does not turn missing API or write requests into the app shell", async () => {
   for (const request of [
     new Request("https://example.test/api/missing", { headers: { accept: "application/json" } }),

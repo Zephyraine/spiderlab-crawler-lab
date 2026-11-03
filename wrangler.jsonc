@@ -6,10 +6,15 @@
   "assets": {
     "directory": "./dist/client",
     "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
     "run_worker_first": [
       "/api/*",
       "/target/l1/books",
-      "/target/l1/books/*"
+      "/target/l1/books/*",
+      "/target/l2/foods",
+      "/target/l2/foods/*",
+      "/target/l3/jobs",
+      "/target/l3/jobs/*"
     ]
   }
 }
