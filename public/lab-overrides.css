@@ -1,0 +1,10 @@
+.data-card-link{cursor:pointer}
+.data-card-link:focus-visible,.level-card:focus-visible,.job-card:focus-visible{outline:3px solid #9b73dc;outline-offset:3px}
+.source-note{display:block;margin-top:10px;color:#7d7088;font-size:11px}
+.pagination button{width:38px;height:38px;display:grid;place-items:center;border:1px solid #d1c1df;background:#fff;border-radius:9px;color:inherit;cursor:pointer}
+.pagination button.active,.pagination button:hover{color:#fff;background:var(--purple);border-color:var(--purple)}
+.inline-loader{min-height:240px;display:grid;place-items:center}
+.inline-loader i{width:28px;height:28px;border:3px solid #d8c7e8;border-top-color:var(--purple);border-radius:50%;animation:spin .8s linear infinite}
+.empty-state{padding:48px;text-align:center;color:var(--muted)}
+.job-salary{color:#d17724;font-size:24px;font-weight:850}
+.target-meta{justify-content:flex-start}

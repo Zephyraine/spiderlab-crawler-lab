@@ -1,7 +1,8 @@
 node_modules/
 dist/
 work/
-.openai/
+.openai/*
+!.openai/hosting.json
 
 # Local development files
 .env

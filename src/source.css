@@ -9,3 +9,46 @@
 .source-link:hover {
   text-decoration: underline;
 }
+
+.level-card {
+  display: block;
+}
+
+.level-card:focus-visible,
+.job-card:focus-visible,
+.data-card-link:focus-visible {
+  outline: 3px solid #9b73dc;
+  outline-offset: 3px;
+}
+
+.job-list .job-card {
+  min-height: 116px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 22px;
+  border: 1px solid #e0d7e7;
+  background: #fff;
+  border-radius: 14px;
+  transition: .2s ease;
+}
+
+.job-list .job-card:hover {
+  border-color: #b89add;
+  transform: translateX(3px);
+  box-shadow: 0 12px 30px #51239512;
+}
+
+.source-note {
+  display: block;
+  margin-top: 11px;
+  color: #7d7088;
+  font-size: 11px;
+}
+
+@media (max-width: 680px) {
+  .job-list .job-card {
+    padding: 16px;
+    gap: 12px;
+  }
+}

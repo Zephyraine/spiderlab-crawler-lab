@@ -3,6 +3,21 @@ import { access } from "node:fs/promises";
 import test from "node:test";
 import worker from "../worker/index.js";
 
+const fixture = {
+  books: [{ id:1, title:"测试图书", author:"作者", publisher:"出版社", year:"2026", score:"9.0", reviews:10, category:"文学", description:"简介", image:"/book.jpg", source_platform:"豆瓣读书", collected_at:"2026-01-01" }],
+  foods: [{ id:1, name:"测试餐厅", city:"上海", area:"静安寺", category:"火锅", score:"4.8", reviews:20, address:"测试路 1 号", image:"/food.jpg", source_platform:"大众点评" }],
+  jobs: [{ id:1, title:"Python 实习生", salary:"200元/天", company:"测试公司", category:"后端开发", city:"上海", location:"上海静安区", degree:"本科", skills:["Python"], image:"/job.jpg", source_platform:"BOSS直聘" }],
+};
+
+const apiEnv = {
+  ASSETS: {
+    fetch: async (request) => new URL(request.url).pathname === "/real-data.json"
+      ? new Response(JSON.stringify(fixture), { headers:{ "content-type":"application/json" } })
+      : new Response("missing", { status:404 }),
+  },
+  SESSION_SECRET: "test-session-secret",
+};
+
 test("serves existing static assets without a fallback", async () => {
   const calls = [];
   const response = await worker.fetch(new Request("https://example.test/assets/app.js"), {
@@ -57,7 +72,7 @@ test("does not turn missing API or write requests into the app shell", async () 
     });
 
     assert.equal(response.status, 404);
-    assert.equal(calls, 1);
+    assert.equal(calls, new URL(request.url).pathname.startsWith("/api/") ? 0 : 1);
   }
 });
 
@@ -65,4 +80,44 @@ test("emits the files required by Sites packaging", async () => {
   await access(new URL("../dist/client/index.html", import.meta.url));
   await access(new URL("../dist/server/index.js", import.meta.url));
   await access(new URL("../dist/.openai/hosting.json", import.meta.url));
+});
+
+test("renders L1 as crawlable HTML with full-card detail links", async () => {
+  const response = await worker.fetch(new Request("https://example.test/target/l1/books"), apiEnv);
+  const html = await response.text();
+  assert.equal(response.status, 200);
+  assert.match(html, /class="data-card data-card-link" href="\/target\/l1\/books\/1"/);
+  assert.doesNotMatch(html, /GET \/target\/l1\/books/);
+});
+
+test("serves L2 through an unauthenticated JSON search endpoint", async () => {
+  const response = await worker.fetch(new Request("https://example.test/api/l2/foods/search", {
+    method:"POST", headers:{ "content-type":"application/json" }, body:JSON.stringify({ area:"静安寺", page:1 }),
+  }), apiEnv);
+  const data = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(data.total, 1);
+  assert.equal(data.items[0].name, "测试餐厅");
+});
+
+test("protects L3 job data with CSRF and a signed session cookie", async () => {
+  const denied = await worker.fetch(new Request("https://example.test/api/l3/jobs"), apiEnv);
+  assert.equal(denied.status, 401);
+
+  const session = await worker.fetch(new Request("https://example.test/api/l3/session"), apiEnv);
+  const sessionData = await session.json();
+  const csrfCookie = session.headers.get("set-cookie").split(";")[0];
+
+  const login = await worker.fetch(new Request("https://example.test/api/l3/login", {
+    method:"POST",
+    headers:{ "content-type":"application/json", "cookie":csrfCookie, "x-csrf-token":sessionData.csrf },
+    body:JSON.stringify({ username:"admin", password:"admin123", csrf:sessionData.csrf }),
+  }), apiEnv);
+  assert.equal(login.status, 200);
+  const authCookie = login.headers.get("set-cookie").split(";")[0];
+
+  const allowed = await worker.fetch(new Request("https://example.test/api/l3/jobs", { headers:{ cookie:authCookie } }), apiEnv);
+  const jobs = await allowed.json();
+  assert.equal(allowed.status, 200);
+  assert.equal(jobs.items[0].title, "Python 实习生");
 });
