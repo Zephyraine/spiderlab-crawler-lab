@@ -14,3 +14,25 @@
 .detail.detail{align-items:start}
 .detail.detail h1{max-width:100%;font-size:clamp(30px,3vw,40px);white-space:normal;word-break:break-all;overflow-wrap:anywhere}
 .detail dd{overflow-wrap:anywhere}
+
+/* Silver exhibition theme shared with the Shuhai Tanzhen interior pages. */
+:root{font-family:Arial,Inter,"PingFang SC","Microsoft YaHei",sans-serif;background:#dce1e3;color:#182632;--purple:#725a86;--dark:#182632;--line:#25313a29;--muted:#18263294}
+body{background:#dce1e3 url('./assets/spiderlab-silver-hero.png') center top/cover fixed no-repeat;color:#182632}
+body:before{content:"";position:fixed;inset:0;z-index:-1;background:#dce1e3d1}
+.target-nav{background:#ebf0f2e6;border-color:#25313a29;backdrop-filter:blur(16px)}
+.target-brand img{filter:grayscale(1) contrast(.82) brightness(1.12);opacity:.78}.target-brand b{color:#182632}.target-brand small,.target-nav>a:last-child,.back{color:#18263294}
+.level-switch{background:#f4f6f5d1;border:1px solid #25313a29;border-radius:0;box-shadow:0 12px 28px #2d3f491a}
+.level-switch a{border-radius:0;color:#18263294}.level-switch a.active{background:#fff9;color:#182632;box-shadow:inset 0 -2px #725a86}
+.target-hero{border:1px solid #25313a29;border-radius:6px;box-shadow:0 24px 60px #2d3f492e}
+.target-hero:after{background:#1826328c}.target-hero h1,.detail h1{font-family:"Songti SC",STSong,SimSun,serif;font-weight:400;letter-spacing:.06em}.target-hero p{color:#f4f6f5b8}
+.category-bar{gap:0;border-block:1px solid #25313a47}.category-bar a{border:0;border-right:1px solid #25313a29;border-radius:0;background:#f4f6f5c9;color:#18263294}.category-bar a.active,.category-bar a:hover{background:#fff9;border-color:#25313a29;color:#182632;box-shadow:inset 0 -2px #725a86}
+.target-meta code{color:#182632;background:#f4f6f5d1;border-color:#25313a29;border-radius:2px}
+.data-grid{gap:12px}.data-card{background:#f4f6f5e3;border-color:#25313a29;border-radius:5px;box-shadow:none}.data-card:hover{border-color:#25313a47;box-shadow:0 14px 32px #2d3f4924}.data-card img{filter:saturate(.65)}.data-card h2{font-family:"Songti SC",STSong,SimSun,serif;font-weight:400}.data-card p,.data-card small,.source-note{color:#18263294}.data-card strong,.job-salary{color:#8b4650}
+.filters input,.filters select,.filters button{border-color:#25313a47;border-radius:3px;background:#f4f6f5d6;color:#182632}.filters input:focus,.filters select:focus{border-color:#725a86;box-shadow:0 0 0 2px #725a861c;outline:0}.filters button{background:#182632;color:#f4f6f5;border-color:#182632}
+.pagination a,.pagination button{border-color:#25313a29;border-radius:2px;background:#f4f6f5d1;color:#18263294}.pagination a.active,.pagination a:hover,.pagination button.active,.pagination button:hover{color:#182632;background:#ffffffe0;border-color:#25313a47;box-shadow:inset 0 -2px #725a86}
+.detail{background:#f4f3ed;border-color:#25313a29;border-radius:6px;box-shadow:0 28px 68px #2d3f492b}.detail img{background:#f4f6f5;border:1px solid #25313a29}.lead,dt,.source-note{color:#18263294}dl{border-color:#25313a47}
+.page-step-nav{border-color:#25313a47}.page-step-nav>a{background:#f4f6f5d1;border-color:#25313a47;border-radius:2px;color:#182632}.page-step-nav small{color:#18263294}.page-step-nav .finish{color:#725a86}
+.data-card-link:focus-visible,.level-card:focus-visible,.job-card:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #725a86;outline-offset:3px}
+
+/* Bright grid background and original color assets */
+body{background:#edf4f7 url('./assets/spiderlab-grid-bg.png') center top/cover fixed no-repeat;color:#182632}body:before{background:#f7fbfcb8}.target-brand img{filter:none;opacity:1}.data-card{background:#fffefae8}.data-card img{filter:none}
