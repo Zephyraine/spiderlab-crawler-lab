@@ -275,3 +275,29 @@ body{color:var(--ink);background:#f4f8ff;font-family:Inter,"PingFang SC","Micros
   .header-status i{width:7px;height:7px}
   .brand small,.target-brand small{display:none}
 }
+
+/* SpiderLab purple accent */
+:root{
+  --accent:#7c3aed;
+  --accent-soft:#f5f0ff;
+}
+.home,.lab-page,body>#root>main:not(.home){
+  background-image:linear-gradient(rgba(124,58,237,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,237,.022) 1px,transparent 1px),radial-gradient(900px 520px at 82% -8%,#f0eaff 0,transparent 62%);
+}
+.header-status{color:var(--accent);background:var(--accent-soft);border-color:#e4d7ff}
+.header-status i{background:var(--accent);box-shadow:0 0 0 3px rgba(124,58,237,.11)}
+.hero{background:linear-gradient(120deg,#fff 0%,#fbf9ff 58%,#f5f0ff 100%)}
+.hero-kicker,.section-kicker,.eyebrow,.level-head p,.level-head svg,.level-card li svg,.target-hero p{color:var(--accent)}
+.level-image{background:#f5f0ff}
+.level-image>span,.primary,.filters button{background:var(--accent);border-color:var(--accent)}
+.level-image>em{color:var(--accent);border-color:#e4d7ff}
+.primary{box-shadow:0 7px 18px rgba(124,58,237,.22)}
+.primary:hover,.filters button:hover{background:#6d28d9;border-color:#6d28d9}
+.level-card:hover,.level-card:nth-child(2):hover,.data-card:hover,.job-list .job-card:hover{border-color:#cdb7f5;box-shadow:0 9px 28px rgba(124,58,237,.08)}
+.level-switch.student-bottom-nav a:hover{color:var(--accent);background:#faf7ff}
+.level-switch.student-bottom-nav a.active{color:var(--accent);background:var(--accent-soft)}
+.category-bar a.active,.category-bar a:hover{color:var(--accent);background:var(--accent-soft)}
+.filters input:focus,.filters select:focus,.lab-controls input:focus,.job-filters select:focus,.login-panel input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,58,237,.09)}
+.pagination a.active,.pagination a:hover,.pagination button.active,.pagination button:hover{background:var(--accent);border-color:var(--accent)}
+.lock{color:var(--accent);background:var(--accent-soft);border-color:#e4d7ff}
+.job-tags span{background:var(--accent-soft);border-color:#e4d7ff}
