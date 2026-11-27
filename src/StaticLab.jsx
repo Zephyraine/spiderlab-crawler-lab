@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, ArrowRight, LockKey, MagnifyingGlass, MapPin, SignOut } from "@phosphor-icons/react";
+import { ArrowLeft, ArrowRight, BookOpen, BowlFood, Briefcase, House, LockKey, MagnifyingGlass, MapPin, SignOut } from "@phosphor-icons/react";
 
 const BASE = import.meta.env.BASE_URL;
 const route = (path = "") => `${BASE}${path.replace(/^\/+/, "")}`;
@@ -13,9 +13,10 @@ const currentPath = () => {
 const levels = [["L1", "图书列表", "target/l1/books"], ["L2", "上海餐厅", "target/l2/foods"], ["L3", "北上广职位", "target/l3/jobs"]];
 
 function Header({ active }) {
+  const items=[["home","首页","",House],["L1","图书","target/l1/books",BookOpen],["L2","餐厅","target/l2/foods",BowlFood],["L3","职位","target/l3/jobs",Briefcase]];
   return <>
-    <header className="target-nav"><a className="target-brand" href={route()}><img src={route("assets/spider-logo-light-v2.png")} alt=""/><b>SpiderLab</b><small>爬虫靶场</small></a><a href={route()}>关卡首页</a></header>
-    <nav className="level-switch" aria-label="关卡切换">{levels.map(([id, label, href]) => <a key={id} className={active === id ? "active" : ""} href={route(href)}><span>{id}</span><b>{label}</b></a>)}</nav>
+    <header className="target-nav"><a className="target-brand" href={route()}><img src={route("assets/spider-logo-light-v2.png")} alt=""/><b>SpiderLab</b><small>爬虫靶场</small></a><span className="header-status"><i/>课程实践</span></header>
+    <nav className="level-switch student-bottom-nav" aria-label="页面切换">{items.map(([id,label,href,Icon]) => <a key={id} className={active === id ? "active" : ""} href={route(href)}><Icon weight={active===id?"fill":"regular"}/><b>{label}</b></a>)}</nav>
   </>;
 }
 

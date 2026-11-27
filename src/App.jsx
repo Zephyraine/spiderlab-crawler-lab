@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, BookOpen, BowlFood, Briefcase, CheckCircle } from "@phosphor-icons/react";
+import { ArrowRight, BookOpen, BowlFood, Briefcase, CheckCircle, House } from "@phosphor-icons/react";
 import { StaticLab } from "./StaticLab.jsx";
 import { Foods, Jobs } from "./LabPages.jsx";
 
@@ -17,22 +17,23 @@ const levels = [
 
 function Logo(){ return <a className="brand" href={route()}><img src={route("assets/spider-logo-light-v2.png")} alt=""/><span>SpiderLab</span><small>爬虫靶场</small></a>; }
 
-function LevelSwitch({active}){
-  return <nav className="level-switch" aria-label="关卡切换">{levels.map((level)=><a key={level.id} className={active===level.id?"active":""} href={route(level.href)}><span>{level.id}</span><b>{level.title}</b></a>)}</nav>;
+function BottomNav({active="home"}){
+  const items=[
+    {key:"home",label:"首页",href:"",icon:House},
+    ...levels.map((level)=>({key:level.code,label:level.title.replace("列表","").replace("上海","").replace("北上广",""),href:level.href,icon:level.icon})),
+  ];
+  return <nav className="level-switch student-bottom-nav" aria-label="页面切换">{items.map((item)=>{const Icon=item.icon;return <a key={item.key} className={active===item.key?"active":""} href={route(item.href)}><Icon weight={active===item.key?"fill":"regular"}/><b>{item.label}</b></a>})}</nav>;
 }
 
 function Home(){
   return <main className="home">
-    <div className="home-context"><span>数海探真 · 实践课程</span><span>SPIDERLAB / 01—03</span></div>
+    <header className="target-nav home-nav"><Logo/><span className="header-status"><i/>课程实践</span></header>
+    <div className="home-context"><span>COURSE PRACTICE</span><span>SPIDERLAB · 3 个实验</span></div>
     <section className="workspace">
     <section className="hero">
-      <header>
-        <Logo/>
-        <nav className="desktop-nav" aria-label="首页导航"><a href="https://zephyraine.github.io/shuhaitanzhen/">返回数海探真</a><a href="#levels">01—03 实验关卡</a></nav>
-      </header>
       <div className="hero-content">
         <div className="hero-copy">
-          <p className="hero-kicker">COURSE PRACTICE / CRAWLER LABORATORY</p>
+          <p className="hero-kicker">SPIDERLAB · CRAWLER LABORATORY</p>
           <h1>爬虫实验室</h1>
           <p className="hero-intro">从静态页面到登录鉴权，在三组渐进式数据采集实验中理解真实网页结构与请求流程。</p>
         </div>
@@ -50,12 +51,14 @@ function Home(){
     </section>
     </section>
     <footer className="home-footer"><Logo/><p>公开数据快照 · 仅供练习</p></footer>
+    <BottomNav/>
   </main>;
 }
 
 export function App(){
   const path=appPath();
   if(BASE!=="/"&&path.startsWith("/target/"))return <StaticLab/>;
+  if(path.startsWith("/target/l1/books"))return <StaticLab/>;
   if(path.startsWith("/target/l2/foods"))return <Foods/>;
   if(path.startsWith("/target/l3/jobs"))return <Jobs/>;
   return <Home/>;
