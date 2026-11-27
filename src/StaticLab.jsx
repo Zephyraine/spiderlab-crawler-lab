@@ -14,7 +14,7 @@ const levels = [["L1", "图书列表", "target/l1/books"], ["L2", "上海餐厅"
 
 function Header({ active }) {
   return <>
-    <header className="target-nav"><a className="target-brand" href={route()}><img src={route("assets/spider-mascot.png")} alt=""/><b>SpiderLab</b><small>爬虫靶场</small></a><a href={route()}>关卡首页</a></header>
+    <header className="target-nav"><a className="target-brand" href={route()}><img src={route("assets/spider-logo-light-v2.png")} alt=""/><b>SpiderLab</b><small>爬虫靶场</small></a><a href={route()}>关卡首页</a></header>
     <nav className="level-switch" aria-label="关卡切换">{levels.map(([id, label, href]) => <a key={id} className={active === id ? "active" : ""} href={route(href)}><span>{id}</span><b>{label}</b></a>)}</nav>
   </>;
 }

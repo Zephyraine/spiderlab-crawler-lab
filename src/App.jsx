@@ -15,7 +15,7 @@ const levels = [
   { id:"03", code:"L3", title:"北上广职位", kicker:"AUTHENTICATED ACCESS", source:"BOSS直聘", count:"328 条", image:"assets/level-jobs.png", href:"target/l3/jobs", icon:Briefcase, tags:["Cookie 会话","CSRF 校验","登录鉴权","动态列表"] },
 ];
 
-function Logo(){ return <a className="brand" href={route()}><img src={route("assets/spider-mascot.png")} alt=""/><span>SpiderLab</span><small>爬虫靶场</small></a>; }
+function Logo(){ return <a className="brand" href={route()}><img src={route("assets/spider-logo-light-v2.png")} alt=""/><span>SpiderLab</span><small>爬虫靶场</small></a>; }
 
 function LevelSwitch({active}){
   return <nav className="level-switch" aria-label="关卡切换">{levels.map((level)=><a key={level.id} className={active===level.id?"active":""} href={route(level.href)}><span>{level.id}</span><b>{level.title}</b></a>)}</nav>;
@@ -28,11 +28,11 @@ function Home(){
     <section className="hero">
       <header>
         <Logo/>
-        <nav className="desktop-nav" aria-label="首页导航"><a href="#levels">01—03 实验关卡</a></nav>
+        <nav className="desktop-nav" aria-label="首页导航"><a href="https://zephyraine.github.io/shuhaitanzhen/">返回数海探真</a><a href="#levels">01—03 实验关卡</a></nav>
       </header>
       <div className="hero-content">
         <div className="hero-copy">
-          <p className="hero-kicker">PRACTICE ARCHIVE / CRAWLER LABORATORY</p>
+          <p className="hero-kicker">COURSE PRACTICE / CRAWLER LABORATORY</p>
           <h1>爬虫实验室</h1>
           <p className="hero-intro">从静态页面到登录鉴权，在三组渐进式数据采集实验中理解真实网页结构与请求流程。</p>
         </div>
